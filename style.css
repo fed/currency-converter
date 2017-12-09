@@ -1,0 +1,78 @@
+body {
+  align-items: center;
+  background-color: #f2f3f4;
+  display: flex;
+  font-family: sans-serif;
+  height: 100vh;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.Currency-Converter {
+  background-color: #fff;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+  min-width: 300px;
+  padding: 30px;
+}
+
+.Currency-Converter__origin {
+  color: #878787;
+  font-size: 16px;
+}
+
+.Currency-Converter__destination {
+  color: #212121;
+  font-size: 32px;
+}
+
+.Currency-Converter__form {
+  margin: 20px 0 0;
+  white-space: normal;
+}
+
+.Currency-Converter__form-row {
+  margin-bottom: 10px;
+  white-space: nowrap;
+}
+
+.Currency-Converter__form-row:last-child {
+  margin-bottom: 0;
+}
+
+.Currency-Converter__form-field {
+  display: inline-block;
+  vertical-align: top;
+  width: 50%;
+}
+
+.Currency-Converter__form-field input {
+  border-radius: 2px;
+  border-top: 1px solid silver;
+  border: 1px solid #d9d9d9;
+  box-sizing: border-box;
+  color: #878787;
+  font-size: 16px;
+  height: 34px;
+  line-height: 34px;
+  margin: 0;
+  overflow: hidden;
+  padding: 1px 6px;
+  text-align: right;
+  width: 100%;
+}
+
+.Currency-Converter__form-field select {
+  border: 1px solid gainsboro;
+  font-size: 13px;
+  height: 34px;
+  list-style: none;
+  margin: 0;
+  outline: none;
+  overflow: hidden;
+  padding-left: 5px;
+  text-align: left;
+  text-decoration: none;
+  vertical-align: middle;
+  width: 100%;
+}

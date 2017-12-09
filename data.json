@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CAD",
+    "name": "Canadian Dollar",
+    "value": 1.29
+  },
+  {
+    "id": "NZD",
+    "name": "New Zealand Dollar",
+    "value": 1.46
+  },
+  {
+    "id": "AUD",
+    "name": "Australian Dollar",
+    "value": 1.33
+  },
+  {
+    "id": "USD",
+    "name": "US Dollar",
+    "value": 1
+  }
+]

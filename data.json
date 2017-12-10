@@ -1,5 +1,10 @@
 [
   {
+    "id": "USD",
+    "name": "US Dollar",
+    "value": 1
+  },
+  {
     "id": "CAD",
     "name": "Canadian Dollar",
     "value": 1.29
@@ -13,10 +18,5 @@
     "id": "AUD",
     "name": "Australian Dollar",
     "value": 1.33
-  },
-  {
-    "id": "USD",
-    "name": "US Dollar",
-    "value": 1
   }
 ]

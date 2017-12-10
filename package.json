@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "currency-converter",
+  "version": "0.0.0",
+  "main": "index.html",
+  "repository": "https://github.com/fknussel/currency-converter.git",
+  "author": "Federico Knüssel <fknussel@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "serve -p 6789"
+  },
+  "devDependencies": {
+    "serve": "^6.4.1"
+  }
+}

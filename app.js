@@ -52,25 +52,26 @@ function updateLabels() {
   toLabel.textContent = `${getToAmount()} ${getToCurrency()}`;
 }
 
-// Calculate
-function calculate(from, to, value) {
-  const fromRate = Number(rates.find(rate => rate.id === from).value);
-  const toRate = Number(rates.find(rate => rate.id === to).value);
+// Conversions
+function calculateToAmount(from, to, amount) {
+  const fromRate = rates.find(rate => rate.id === from).value;
+  const toRate = rates.find(rate => rate.id === to).value;
+  const normalizedAmount = amount / fromRate;
 
-  if (from === 'USD') {
-    return parseFloat(value * toRate).toFixed(2);
-  } else if (to === 'USD') {
-    return parseFloat(value / fromRate).toFixed(2);
-  } else {
-    const normalizedAmount = value / fromRate;
+  return parseFloat(normalizedAmount * toRate).toFixed(2);
+}
 
-    return parseFloat(normalizedAmount * toRate).toFixed(2);
-  }
+function calculateFromAmount(from, to, amount) {
+  const fromRate = rates.find(rate => rate.id === from).value;
+  const toRate = rates.find(rate => rate.id === to).value;
+  const normalizedAmount = amount * fromRate;
+
+  return parseFloat(normalizedAmount / toRate).toFixed(2);
 }
 
 // Update amounts based on calculations
 function updateFromAmount() {
-  const result = calculate(
+  const result = calculateFromAmount(
     getFromCurrencyCode(),
     getToCurrencyCode(),
     getToAmount()
@@ -80,7 +81,7 @@ function updateFromAmount() {
 }
 
 function updateToAmount() {
-  const result = calculate(
+  const result = calculateToAmount(
     getFromCurrencyCode(),
     getToCurrencyCode(),
     getFromAmount()

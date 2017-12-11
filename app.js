@@ -1,3 +1,6 @@
+// Conversion rates
+let rates = [];
+
 // Selectors
 const fromCurrency = document.getElementById('from-currency');
 const toCurrency = document.getElementById('to-currency');
@@ -6,7 +9,7 @@ const toAmount = document.getElementById('to-amount');
 const fromLabel = document.getElementById('from-label');
 const toLabel = document.getElementById('to-label');
 
-// Currency dropdown menu getters and setters
+// Getters and setters
 function getFromCurrency() {
   return fromCurrency.options[fromCurrency.selectedIndex].text;
 }
@@ -15,38 +18,78 @@ function getToCurrency() {
   return toCurrency.options[toCurrency.selectedIndex].text;
 }
 
-function setFromCurrency(id) {
+function getFromCurrencyCode() {
+  return fromCurrency.options[fromCurrency.selectedIndex].value;
+}
+
+function getToCurrencyCode() {
+  return toCurrency.options[toCurrency.selectedIndex].value;
+}
+
+function setFromCurrency(currencyCode) {
   Array.from(fromCurrency.options).find(
-    currency => currency.value === id
+    currency => currency.value === currencyCode
   ).selected = true;
 }
 
-function setToCurrency(id) {
+function setToCurrency(currencyCode) {
   Array.from(toCurrency.options).find(
-    currency => currency.value === id
+    currency => currency.value === currencyCode
   ).selected = true;
+}
+
+function getFromAmount() {
+  return Number(fromAmount.value);
+}
+
+function getToAmount() {
+  return Number(toAmount.value);
+}
+
+// Update labels
+function updateLabels() {
+  fromLabel.textContent = `${getFromAmount()} ${getFromCurrency()}`;
+  toLabel.textContent = `${getToAmount()} ${getToCurrency()}`;
 }
 
 // Calculate
-function convert(from, to, value, rates) {
+function calculate(from, to, value) {
+  const fromRate = Number(rates.find(rate => rate.id === from).value);
+  const toRate = Number(rates.find(rate => rate.id === to).value);
+
   if (from === 'USD') {
-    const rate = rates.find(rate => rate.id === to).value;
-
-    return value * rate;
+    return parseFloat(value * toRate).toFixed(2);
   } else if (to === 'USD') {
-    const rate = rates.find(rate => rate.id === from).value;
-
-    return value / rate;
+    return parseFloat(value / fromRate).toFixed(2);
   } else {
-    const fromRate = rates.find(rate => rate.id === from).value;
-    const toRate = rates.find(rate => rate.id === to).value;
-    const normalizedValue = value / fromRate;
+    const normalizedAmount = value / fromRate;
 
-    return normalizedValue * toRate;
+    return parseFloat(normalizedAmount * toRate).toFixed(2);
   }
 }
 
-// Populate currency options
+// Update amounts based on calculations
+function updateFromAmount() {
+  const result = calculate(
+    getFromCurrencyCode(),
+    getToCurrencyCode(),
+    getToAmount()
+  );
+
+  fromAmount.value = result;
+}
+
+function updateToAmount() {
+  const result = calculate(
+    getFromCurrencyCode(),
+    getToCurrencyCode(),
+    getFromAmount()
+  );
+
+  toAmount.value = result;
+}
+
+// Populate currency options based on json file
 function populate(rates) {
   rates.forEach(rate => {
     const option = document.createElement('option');
@@ -63,21 +106,48 @@ function populate(rates) {
 
 // Load sample data
 function loadExample(rates) {
-  const audRate = rates.find(rate => rate.id === 'AUD');
-  const result = Number(audRate.value);
+  const audRate = Number(rates.find(rate => rate.id === 'AUD').value);
 
   fromAmount.value = 1;
-  toAmount.value = result;
+  toAmount.value = audRate;
 
   setFromCurrency('USD');
   setToCurrency('AUD');
 
-  fromLabel.textContent = `${fromAmount.value} ${getFromCurrency()}`;
-  toLabel.textContent = `${result} ${getToCurrency()}`;
+  updateLabels();
 }
 
-// Rates data
+// Bind events
+fromAmount.addEventListener('input', () => {
+  updateToAmount();
+  updateLabels();
+});
+
+toAmount.addEventListener('input', () => {
+  updateFromAmount();
+  updateLabels();
+});
+
+fromCurrency.addEventListener('change', () => {
+  updateToAmount();
+  updateLabels();
+});
+
+toCurrency.addEventListener('change', () => {
+  updateFromAmount();
+  updateLabels();
+});
+
+// Cache conversion rates
+function cacheRates(data) {
+  rates = data;
+
+  return data;
+}
+
+// Bootstrap app
 fetch('data.json')
   .then(response => response.json())
+  .then(cacheRates)
   .then(populate)
   .then(loadExample);

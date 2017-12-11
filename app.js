@@ -1,6 +1,3 @@
-// Conversion rates
-let rates = [];
-
 // Selectors
 const fromCurrency = document.getElementById('from-currency');
 const toCurrency = document.getElementById('to-currency');
@@ -53,7 +50,7 @@ function updateLabels() {
 }
 
 // Conversions
-function calculateToAmount(from, to, amount) {
+function calculateToAmount(from, to, amount, rates) {
   const fromRate = rates.find(rate => rate.id === from).value;
   const toRate = rates.find(rate => rate.id === to).value;
   const normalizedAmount = amount / fromRate;
@@ -61,7 +58,7 @@ function calculateToAmount(from, to, amount) {
   return parseFloat(normalizedAmount * toRate).toFixed(2);
 }
 
-function calculateFromAmount(from, to, amount) {
+function calculateFromAmount(from, to, amount, rates) {
   const fromRate = rates.find(rate => rate.id === from).value;
   const toRate = rates.find(rate => rate.id === to).value;
   const normalizedAmount = amount * fromRate;
@@ -70,21 +67,23 @@ function calculateFromAmount(from, to, amount) {
 }
 
 // Update amounts based on calculations
-function updateFromAmount() {
+function updateFromAmount(rates) {
   const result = calculateFromAmount(
     getFromCurrencyCode(),
     getToCurrencyCode(),
-    getToAmount()
+    getToAmount(),
+    rates
   );
 
   fromAmount.value = result;
 }
 
-function updateToAmount() {
+function updateToAmount(rates) {
   const result = calculateToAmount(
     getFromCurrencyCode(),
     getToCurrencyCode(),
-    getFromAmount()
+    getFromAmount(),
+    rates
   );
 
   toAmount.value = result;
@@ -116,39 +115,38 @@ function loadExample(rates) {
   setToCurrency('AUD');
 
   updateLabels();
+
+  return rates;
 }
 
-// Bind events
-fromAmount.addEventListener('input', () => {
-  updateToAmount();
-  updateLabels();
-});
+// Bind events on all form elements
+function addEventListeners(rates) {
+  fromAmount.addEventListener('input', () => {
+    updateToAmount(rates);
+    updateLabels();
+  });
 
-toAmount.addEventListener('input', () => {
-  updateFromAmount();
-  updateLabels();
-});
+  toAmount.addEventListener('input', () => {
+    updateFromAmount(rates);
+    updateLabels();
+  });
 
-fromCurrency.addEventListener('change', () => {
-  updateToAmount();
-  updateLabels();
-});
+  fromCurrency.addEventListener('change', () => {
+    updateToAmount(rates);
+    updateLabels();
+  });
 
-toCurrency.addEventListener('change', () => {
-  updateToAmount();
-  updateLabels();
-});
-
-// Cache conversion rates
-function cacheRates(data) {
-  rates = data;
-
-  return data;
+  toCurrency.addEventListener('change', () => {
+    updateToAmount(rates);
+    updateLabels();
+  });
 }
 
 // Bootstrap app
-fetch('data.json')
-  .then(response => response.json())
-  .then(cacheRates)
-  .then(populate)
-  .then(loadExample);
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('data.json')
+    .then(response => response.json())
+    .then(populate)
+    .then(loadExample)
+    .then(addEventListeners);
+});

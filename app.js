@@ -6,24 +6,22 @@ const toAmount = document.getElementById('to-amount');
 const fromLabel = document.getElementById('from-label');
 const toLabel = document.getElementById('to-label');
 
-// Currency dropdown menues getters and setters
-function getSelectedFromCurrency() {
+// Currency dropdown menu getters and setters
+function getFromCurrency() {
   return fromCurrency.options[fromCurrency.selectedIndex].text;
 }
 
-function getSelectedToCurrency() {
+function getToCurrency() {
   return toCurrency.options[toCurrency.selectedIndex].text;
 }
 
-// Select currency
-function selectFromCurrency(id) {
-  console.log(fromCurrency.options);
+function setFromCurrency(id) {
   Array.from(fromCurrency.options).find(
     currency => currency.value === id
   ).selected = true;
 }
 
-function selectToCurrency(id) {
+function setToCurrency(id) {
   Array.from(toCurrency.options).find(
     currency => currency.value === id
   ).selected = true;
@@ -71,11 +69,11 @@ function loadExample(rates) {
   fromAmount.value = 1;
   toAmount.value = result;
 
-  selectFromCurrency('USD');
-  selectToCurrency('AUD');
+  setFromCurrency('USD');
+  setToCurrency('AUD');
 
-  fromLabel.textContent = `${fromAmount.value} ${getSelectedFromCurrency()}`;
-  toLabel.textContent = `${result} ${getSelectedToCurrency()}`;
+  fromLabel.textContent = `${fromAmount.value} ${getFromCurrency()}`;
+  toLabel.textContent = `${result} ${getToCurrency()}`;
 }
 
 // Rates data

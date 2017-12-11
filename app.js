@@ -135,7 +135,7 @@ fromCurrency.addEventListener('change', () => {
 });
 
 toCurrency.addEventListener('change', () => {
-  updateFromAmount();
+  updateToAmount();
   updateLabels();
 });
 
